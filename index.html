@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#14112a" />
+    <title>Click Seeker Heróis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- Aviso de erro na tela: mostra arquivo faltando ou falha de script, para facilitar achar o problema -->
+    <div class="erro-global" id="erro-global" hidden role="alert"></div>
+    <script>
+        window.addEventListener("error", function (e) {
+            var t = e.target, msg = "";
+            if (t && t.tagName === "SCRIPT") {
+                msg = "Não consegui carregar o arquivo \"" + (t.getAttribute("src") || "") + "\". Confira se ele está na mesma pasta do index.html.";
+            } else if (t && t.tagName === "LINK") {
+                if ((t.getAttribute("href") || "").indexOf("style.css") === -1) return;
+                msg = "Não consegui carregar o arquivo \"style.css\". Confira se ele está na mesma pasta do index.html.";
+            } else if (e.message) {
+                msg = "Erro no jogo: " + e.message + (e.filename ? " (" + e.filename.split("/").pop() + ":" + e.lineno + ")" : "");
+            }
+            var caixa = document.getElementById("erro-global");
+            if (!msg || !caixa || !caixa.hidden) return;
+            caixa.textContent = msg + "  (clique para fechar)";
+            caixa.hidden = false;
+            caixa.onclick = function () { caixa.hidden = true; };
+        }, true);
+    </script>
+    <div class="app">
+        <header class="topo">
+            <h1 class="titulo">Click Seeker</h1>
+            <div class="ouro-box" id="ouro-box" aria-label="Ouro">
+                <span class="moeda-icone" aria-hidden="true"></span>
+                <span id="ouro">0</span>
+            </div>
+            <div class="acoes">
+                <button class="btn-mini btn-arvore" id="btn-arvore" type="button">Talentos<span class="selo" id="selo-pontos" hidden>0</span></button>
+                <button class="btn-mini" id="btn-ajuda" type="button">Ajuda</button>
+                <button class="btn-mini" id="btn-conta" type="button">Entrar</button>
+                <button class="btn-mini btn-dev" id="btn-dev" type="button" hidden>Dev</button>
+                <button class="btn-mini" id="btn-som" type="button" aria-pressed="true">Som: ligado</button>
+                <button class="btn-mini" id="btn-salvar" type="button">Salvar</button>
+                <button class="btn-mini" id="btn-zerar" type="button">Zerar</button>
+            </div>
+        </header>
+
+        <main class="jogo">
+            <section class="palco-col" aria-label="Combate">
+                <div class="cena" id="cena">
+                    <canvas class="fundo" id="fundo" width="160" height="96"></canvas>
+
+                    <div class="cena-topo">
+                        <span class="chip" id="zona-nome">Zona 1 · Floresta</span>
+                        <span class="chip" id="pips"></span>
+                    </div>
+
+                    <button class="monstro" id="monstro" type="button" aria-label="Atacar o monstro">
+                        <span class="monstro-corpo"><canvas id="monstro-canvas" width="16" height="16"></canvas></span>
+                    </button>
+
+                    <div class="banner" id="banner" aria-hidden="true"></div>
+                </div>
+
+                <div class="alvo">
+                    <div class="alvo-linha">
+                        <span class="alvo-nome" id="monstro-nome">Gosma</span>
+                        <span class="alvo-recorde" id="recorde">Recorde: zona 1</span>
+                    </div>
+                    <div class="vida" role="progressbar" aria-label="Vida do monstro">
+                        <div class="vida-fill" id="vida-fill"></div>
+                        <span class="vida-texto" id="vida-texto">10 / 10</span>
+                    </div>
+                    <div class="tempo" id="tempo" hidden>
+                        <div class="tempo-fill" id="tempo-fill"></div>
+                        <span class="tempo-texto" id="tempo-texto">30,0 s</span>
+                    </div>
+                </div>
+
+                <p class="taxas">
+                    <span>Dano por clique: <b id="dano-clique">1</b></span>
+                    <span>Dano por segundo: <b id="dps">0</b></span>
+                </p>
+
+                <div class="habilidades" id="habilidades"></div>
+
+                <button class="btn-modo-zona" id="btn-farm" type="button" aria-pressed="true">Modo: avançar de zona</button>
+            </section>
+
+            <section class="grupo" id="grupo" aria-label="Grupo de heróis">
+                <div class="grupo-topo">
+                    <h2>Grupo</h2>
+                    <span class="grupo-conta" id="grupo-conta">0 / 0</span>
+                </div>
+                <div class="grupo-grade" id="grupo-grade"></div>
+                <p class="grupo-total">Dano total por segundo: <b id="grupo-dps">0</b></p>
+            </section>
+
+            <section class="loja" aria-label="Heróis">
+                <div class="loja-topo">
+                    <h2>Heróis</h2>
+                    <div class="modos" role="group" aria-label="Quantidade por compra">
+                        <button class="btn-qtd" type="button" data-modo="1" aria-pressed="true">x1</button>
+                        <button class="btn-qtd" type="button" data-modo="10" aria-pressed="false">x10</button>
+                        <button class="btn-qtd" type="button" data-modo="25" aria-pressed="false">x25</button>
+                        <button class="btn-qtd" type="button" data-modo="max" aria-pressed="false">Máx</button>
+                    </div>
+                </div>
+                <ul class="lista-herois" id="lista-herois"></ul>
+            </section>
+        </main>
+    </div>
+
+    <div class="arvore-fundo" id="arvore" hidden>
+        <section class="arvore-painel" role="dialog" aria-modal="true" aria-labelledby="arvore-titulo">
+            <header class="arvore-topo">
+                <h2 id="arvore-titulo">Talentos</h2>
+                <span class="arvore-pontos">Pontos: <b id="arvore-pontos">0</b></span>
+                <div class="arvore-acoes">
+                    <button class="btn-mini" id="arvore-redefinir" type="button">Redefinir</button>
+                    <button class="btn-mini" id="arvore-fechar" type="button">Fechar</button>
+                </div>
+            </header>
+            <div class="arvore-ramos" id="arvore-ramos"></div>
+            <div class="arvore-info" id="arvore-info"></div>
+        </section>
+    </div>
+
+    <!-- Tela inicial -->
+    <div class="inicio" id="inicio">
+        <div class="inicio-caixa">
+            <div class="inicio-sprites" aria-hidden="true">
+                <canvas data-sprite="slime"></canvas>
+                <canvas data-sprite="pip"></canvas>
+                <canvas data-sprite="padre"></canvas>
+                <canvas data-sprite="dragao"></canvas>
+            </div>
+            <h1 class="inicio-titulo">Click Seeker</h1>
+            <p class="inicio-sub">Clique, contrate heróis e derrote chefes.</p>
+            <button class="btn-grande" id="inicio-jogar" type="button">Jogar</button>
+            <p class="inicio-info" id="inicio-info"></p>
+            <div class="inicio-links">
+                <button class="btn-mini" id="inicio-tutorial" type="button">Como jogar</button>
+                <button class="btn-mini" id="inicio-conta" type="button">Conta</button>
+            </div>
+            <p class="inicio-status" id="inicio-status"></p>
+        </div>
+    </div>
+
+    <!-- Tutorial completo (pulável, reabre pelo botão Ajuda ou tecla H) -->
+    <div class="tut-fundo" id="tutorial" hidden>
+        <section class="tut-caixa" role="dialog" aria-modal="true" aria-labelledby="tut-titulo">
+            <header class="tut-topo">
+                <span class="tut-etapa" id="tut-etapa"></span>
+                <div class="tut-topo-acoes">
+                    <button class="btn-mini" id="tut-indice-btn" type="button" aria-expanded="false">Índice</button>
+                    <button class="btn-mini tut-pular" id="tut-pular" type="button">Pular tutorial</button>
+                </div>
+            </header>
+            <div class="tut-barra" aria-hidden="true"><span id="tut-barra-fill"></span></div>
+            <nav class="tut-indice" id="tut-indice" hidden aria-label="Capítulos do tutorial"></nav>
+            <div class="tut-corpo" id="tut-corpo">
+                <div class="tut-arte" id="tut-arte" aria-hidden="true"></div>
+                <h2 id="tut-titulo"></h2>
+                <div class="tut-texto" id="tut-texto"></div>
+            </div>
+            <div class="tut-pontos" id="tut-pontos" aria-hidden="true"></div>
+            <div class="tut-nav">
+                <button class="btn-mini" id="tut-voltar" type="button">Voltar</button>
+                <button class="btn-grande" id="tut-proximo" type="button">Próximo</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Conta -->
+    <div class="modal-fundo" id="conta" hidden>
+        <section class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="conta-titulo">
+            <header class="modal-topo">
+                <h2 id="conta-titulo">Conta</h2>
+                <button class="btn-mini" id="conta-fechar" type="button">Fechar</button>
+            </header>
+
+            <div id="conta-deslogado">
+                <p class="conta-aviso" id="conta-aviso"></p>
+                <div class="abas" role="group" aria-label="Entrar ou criar conta">
+                    <button class="aba" type="button" data-aba="entrar" aria-pressed="true">Entrar</button>
+                    <button class="aba" type="button" data-aba="criar" aria-pressed="false">Criar conta</button>
+                </div>
+                <form class="conta-form" id="conta-form" novalidate>
+                    <label data-so="criar">Nome de jogador
+                        <input id="conta-nome" type="text" maxlength="24" autocomplete="nickname" />
+                    </label>
+                    <label>E-mail
+                        <input id="conta-email" type="email" autocomplete="email" />
+                    </label>
+                    <label>Senha
+                        <input id="conta-senha" type="password" minlength="6" autocomplete="current-password" />
+                    </label>
+                    <details class="conta-dev" data-so="criar">
+                        <summary>Sou desenvolvedor</summary>
+                        <label>Código de dev
+                            <input id="conta-codigo" type="password" autocomplete="off" />
+                        </label>
+                    </details>
+                    <p class="conta-erro" id="conta-erro" role="alert"></p>
+                    <button class="btn-grande" id="conta-enviar" type="submit">Entrar</button>
+                </form>
+                <div class="conta-ou">ou</div>
+                <div class="conta-extra">
+                    <button class="btn-mini" id="conta-google" type="button">Entrar com Google</button>
+                    <button class="btn-link" id="conta-esqueci" type="button" data-so="entrar">Esqueci a senha</button>
+                </div>
+            </div>
+
+            <div id="conta-logado" hidden>
+                <p class="conta-perfil">
+                    <b id="conta-nome-ver"></b>
+                    <span class="papel" id="conta-papel"></span><br />
+                    <small id="conta-email-ver"></small>
+                </p>
+                <p class="conta-sync" id="conta-sync"></p>
+                <div class="conta-acoes">
+                    <button class="btn-mini" id="conta-enviar-nuvem" type="button">Salvar na nuvem agora</button>
+                    <button class="btn-mini" id="conta-baixar" type="button">Baixar da nuvem</button>
+                    <button class="btn-mini" id="conta-sair" type="button">Sair</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pergunta genérica (conflito entre nuvem e aparelho etc.) -->
+    <div class="modal-fundo" id="dialogo" hidden>
+        <section class="modal-caixa" role="alertdialog" aria-modal="true" aria-labelledby="dialogo-titulo">
+            <h2 id="dialogo-titulo"></h2>
+            <div class="dialogo-corpo" id="dialogo-corpo"></div>
+            <div class="dialogo-botoes" id="dialogo-botoes"></div>
+        </section>
+    </div>
+
+    <!-- Painel de desenvolvedor (só aparece para contas dev) -->
+    <aside class="dev" id="dev" hidden aria-label="Painel de desenvolvedor">
+        <header class="dev-topo">
+            <b>Painel Dev</b>
+            <button class="btn-mini" id="dev-fechar" type="button">Esconder</button>
+        </header>
+        <div class="dev-corpo" id="dev-corpo"></div>
+    </aside>
+
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+    <script src="firebase-config.js"></script>
+    <script src="sprites.js"></script>
+    <script src="script.js"></script>
+    <script src="nuvem.js"></script>
+    <script src="meta.js"></script>
+</body>
+</html>
