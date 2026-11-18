@@ -1,0 +1,19 @@
+CLICK SEEKER — V33 | POLIMENTO DAS INTERFACES
+
+Base: V32 — vistoria visual dos heróis.
+
+O que mudou:
+- Fichas dos heróis e tutorial de equipamentos agora usam molduras, fundos, cabeçalhos, cores e botões do bioma ativo.
+- Modal da forja/bancada e cartões de receitas receberam acabamento pixel-art coerente com a interface adaptativa.
+- Materiais, efeitos, raridades, custos e botões de fabricação ganharam melhor hierarquia e contraste.
+- Cartões de equipamentos no inventário usam a mesma linguagem visual.
+- Painel de desenvolvedor foi ampliado e organizado com controles temáticos, campos e seções mais legíveis.
+- Ajustes responsivos para telas estreitas, incluindo rolagem e reorganização dos cards.
+
+Nenhuma regra de jogo, receita, atributo, item, save ou sincronização foi alterada.
+Versão de save permanece V11; o progresso existente é preservado.
+
+Validação realizada:
+- node --check em script.js, sprites.js, meta.js e nuvem.js.
+- Parse CSS sem erros em style.css e ui-biomas.css.
+- IDs do HTML sem duplicidade.

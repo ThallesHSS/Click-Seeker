@@ -1,0 +1,30 @@
+CLICK SEEKER — V32
+Vistoria visual dos equipamentos nos heróis
+
+ESCOPO
+Esta atualização revisa somente a composição visual das armas nos sprites dos heróis. Não altera receitas, raridades, atributos, inventário, construções, estações ou progressão.
+
+CORREÇÕES
+- Máscaras de arma revisadas individualmente para evitar restos de lâminas, guardas, pomos e cabos da arma padrão.
+- Máscaras mais precisas em sprites com ornamentos, flores, auréolas, penas e efeitos; esses detalhes foram preservados quando não fazem parte da arma.
+- Mãos originais de Pip, Bruma, Vesper e Padre redesenhadas sobre o equipamento para manter a leitura de empunhadura.
+- Poses de cajado ajustadas por personagem para respeitar a altura do cabelo, da cabeça e dos ornamentos.
+- Arcos de Bento e Cefas espelhados para o lado correto; Mira mantém o arco à esquerda.
+- Arco redesenhado para ficar mais legível em 16x16.
+- Espada reposicionada em uma pose vertical compacta, com ponta, lâmina, guarda, empunhadura e pomo dentro da tela do sprite.
+- Máscaras de Ossinho e demais armas de duas partes revisadas para não deixar fragmentos no lado oposto.
+
+PERSONAGENS CONFERIDOS
+Todos os 30 heróis do elenco foram inspecionados: Pip, Tora, Mira, Gandor, Luna, Sombra, Barba-Ruiva, Draco, Bruma, Kuro, Zeph, Brasa, Vesper, Padre Thalles, pedrinhoo07140, Kobi, Antão, Chico, Ossinho, Terê, Bento, Pio, Paulo, Tic-Tac, Aurélio, Jerônimo, Tomás, Cefas, Teóforo e José.
+
+COMPATIBILIDADE
+- Save continua na versão 11. Nenhuma estrutura de dados foi alterada.
+- Equipamentos continuam individuais por herói e as regras de compatibilidade de classe permanecem iguais.
+- Acampamento, grupo principal e card do herói continuam usando o mesmo compositor visual.
+
+VALIDAÇÃO
+- Sintaxe dos quatro arquivos JavaScript conferida.
+- Estrutura de IDs HTML e referências locais conferidas.
+- Sintaxe dos CSS conferida.
+- Integridade do arquivo ZIP conferida.
+- Revisão visual dos 30 sprites com as armas compatíveis aplicada; não foi possível executar uma sessão visual completa no navegador neste ambiente.

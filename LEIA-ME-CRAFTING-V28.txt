@@ -1,0 +1,54 @@
+CLICK SEEKER — V28: ESTAÇÕES VISUAIS E CRAFTING DE EQUIPAMENTOS
+
+BASE
+- Continuação direta da V27.
+- Mantém o conserto de clique nos personagens da V26 e as construções permanentes da V27.
+
+ESTAÇÕES NO CENÁRIO
+- Bancada de Ofício e Forja aparecem visualmente no acampamento quando construídas.
+- Cada estação é um elemento em pixel art com profundidade 2.5D, organizado por posição no terreno.
+- As estações podem ser clicadas diretamente para abrir suas receitas.
+- Os botões de acesso no painel de construções continuam funcionando como alternativa.
+- A Forja continua exigindo a construção prévia da Bancada de Ofício.
+
+RECEITAS INICIAIS
+Forja — armas:
+1. Espada de Ferro (Comum): +12% de dano do herói equipado. Custo: 4 Ferro bruto e 2 Madeira.
+2. Machado de Batalha (Incomum): +22% de dano do herói equipado. Custo: 7 Ferro bruto, 3 Madeira e 2 Couro.
+
+Bancada de Ofício — armaduras e acessórios:
+3. Gibão de Couro (Comum): +8% de dano do herói equipado. Custo: 4 Couro e 3 Tecido.
+4. Amuleto do Viajante (Incomum): +5% de ouro e +1,5% de chance de crítico. Custo: 3 Ervas, 2 Tecido e 1 Couro.
+
+CRAFTING E EQUIPAMENTO
+- Uma fabricação consome os materiais listados e cria uma unidade individual.
+- A checagem de todos os custos ocorre antes do consumo; não há gasto parcial.
+- O inventário aceita até 300 equipamentos.
+- A aba “Equipamentos” foi adicionada ao inventário para consultar raridade, bônus e personagem que está usando cada peça.
+- O card do herói permite equipar, trocar e retirar arma, armadura e acessório.
+- Um item só pode ser equipado por um herói de cada vez.
+- Os bônus de dano afetam o poder real do herói equipado; bônus de ouro e crítico entram nos cálculos gerais enquanto o acessório estiver equipado.
+- Os bônus de equipamentos se acumulam quando peças compatíveis estão equipadas.
+
+SAVE E SINCRONIZAÇÃO
+- Save atualizado para versão 11.
+- Equipamentos são persistidos dentro de inventario.equipamentos e os vínculos permanecem em equipamentosHerois.
+- A migração mantém os materiais, construções, heróis, talentos, equipamentos já existentes e demais progressos dos saves anteriores.
+- A assinatura de sincronização da nuvem já inclui inventário e equipamentosHerois; não foi necessário alterar meta.js.
+
+ARQUIVOS PRESERVADOS
+- firebase-config.js original.
+- sprites.js, meta.js, nuvem.js, firestore.rules e assets existentes.
+
+INSTALAÇÃO
+1. Faça um backup da versão atual.
+2. Extraia o ZIP e substitua os arquivos do projeto.
+3. Preserve seu firebase-config.js se tiver configuração personalizada.
+4. Não apague o save. A migração é automática.
+
+VALIDAÇÃO EXECUTADA
+- node --check nos JavaScripts do projeto.
+- HTML: sem IDs duplicados e sem referências locais ausentes.
+- CSS: sem erros de parsing em style.css e ui-biomas.css.
+- ZIP: integridade conferida.
+- A execução visual completa em navegador não foi possível neste ambiente.

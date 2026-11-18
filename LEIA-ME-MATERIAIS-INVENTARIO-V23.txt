@@ -1,0 +1,64 @@
+CLICK SEEKER — MATERIAIS E INVENTÁRIO V23
+
+BASE E COMPATIBILIDADE
+- Base combinada: Skill Tree com passivas alinhadas V21 + céu/detalhes do acampamento V21 + reposicionamento das quatro árvores superiores V22.
+- Mantém UI pixel art por bioma, skill tree radial, árvores/tendas 2.5D, nuvens, arbustos, troncos, pássaros, fogueira e navegação social.
+- Save atualizado para versão 7. Saves anteriores são migrados automaticamente e recebem um inventário vazio.
+
+INVENTÁRIO
+- Novo botão de mochila no cabeçalho abre o inventário de materiais a qualquer momento.
+- O inventário é persistente e sincronizado com a nuvem.
+- Categorias: básicos, recursos de bioma e materiais especiais.
+- Estrutura extensível: inventario.materiais, inventario.consumiveis, inventario.equipamentos, inventario.projetos e inventario.estruturas.
+- Nesta etapa, somente materiais estão ativos; os demais espaços ficam preparados para futuras implementações.
+
+MATERIAIS BÁSICOS
+- Madeira, Pedra, Ferro bruto, Tecido, Couro e Ervas.
+- Monstros comuns têm 18% de chance de render um material básico (1 unidade, com 22% de chance de receber uma unidade adicional). Quando um material básico é sorteado, a distribuição ponderada é: Madeira 24%, Pedra 22%, Ferro bruto 17%, Tecido 12%, Couro 11% e Ervas 14%.
+- Baús/monstros especiais têm uma chance adicional de 35% de render um material básico.
+
+MATERIAIS DE BIOMA
+- Floresta: Seiva vital.
+- Caverna: Fragmento cristalino.
+- Deserto: Areia solar.
+- Geleira: Cristal glacial.
+- Vulcão: Núcleo ígneo.
+- Monstros comuns têm 10% de chance de render uma unidade do recurso do bioma atual.
+- Monstros comuns têm uma chance independente de 10% de render uma unidade do recurso do bioma.
+- Chefes garantem 2 unidades do recurso do bioma.
+
+MATERIAIS ESPECIAIS
+- Fragmento sagrado: 15% de chance por chefe após contratar Padre Thalles.
+- Fragmento abissal: 15% de chance por chefe após contratar pedrinhoo07140.
+- As duas chances são independentes e não aparecem na tabela de recompensa antes da contratação do respectivo herói.
+
+RECOMPENSAS DE CHEFE
+- Todo chefe rende 3 ou 4 unidades de materiais básicos, mais 2 unidades do material do bioma atual.
+- Os dois fragmentos especiais são rolados separadamente se seus respectivos heróis já foram contratados.
+
+OBTENÇÃO E EXIBIÇÃO
+- Recursos são concedidos automaticamente ao derrotar monstros.
+- Uma notificação aparece somente quando algum material é encontrado, agrupando os itens da mesma recompensa.
+- Inimigos identificados como baú têm uma chance adicional independente de 35% de conceder um material básico extra.
+- O selo da mochila mostra o total de unidades armazenadas (máximo visual 99+).
+- O inventário pode ser filtrado por Todos, Básicos, Biomas e Especiais.
+
+AINDA NÃO IMPLEMENTADO (PRÓXIMAS ETAPAS)
+- Mercador, preços e estoque RNG.
+- Receitas, crafting e estruturas de fabricação.
+- Equipamentos, consumíveis e blueprints.
+- Não existe ainda gasto ou conversão de materiais; por enquanto eles apenas são coletados e armazenados.
+
+ARQUIVOS PRINCIPAIS
+- index.html: botão e janela do inventário.
+- script.js: catálogo, drops, armazenamento, migração e renderização.
+- sprites.js: ícones pixel art dos materiais.
+- style.css: painel e cartões do inventário.
+- meta.js: resumo e assinatura da sincronização em nuvem incluem o inventário.
+- ui-biomas.css: skins por bioma preservadas.
+
+INSTALAÇÃO
+1. Faça backup da pasta atual.
+2. Extraia o ZIP e substitua os arquivos do projeto.
+3. Preserve firebase-config.js caso tenha alterado as credenciais.
+4. Não apague os saves locais ou da nuvem.

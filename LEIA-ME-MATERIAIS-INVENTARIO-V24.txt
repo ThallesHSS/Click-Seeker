@@ -1,0 +1,42 @@
+CLICK SEEKER — MATERIAIS E INVENTÁRIO V24
+
+BASE
+- Projeto completo baseado na V23 de materiais e inventário, preservando UI pixel art por bioma, acampamento social, árvore de talentos e passivas.
+
+ALTERAÇÕES
+1. Chances de obtenção reduzidas em dois terços (mantém-se um terço da chance anterior):
+   - Drop básico comum: 18% -> 6%.
+   - Drop de material do bioma: 10% -> 3,33%.
+   - Drop de fragmento especial em chefe: 15% -> 5%.
+   - Drop adicional de material em baú: 35% -> 11,67%.
+   - Pacotes garantidos de chefes e chances de quantidade extra permanecem iguais, pois não são chances de drop.
+2. Selo verde de novidades:
+   - O contador agora soma apenas materiais adquiridos desde a última abertura do inventário.
+   - Abrir o inventário limpa as novidades pendentes e salva imediatamente.
+   - As quantidades totais continuam guardadas normalmente.
+   - Se novos materiais forem obtidos enquanto a janela estiver aberta, eles voltam a aparecer como novidade.
+3. GUI adaptável por bioma:
+   - A janela de inventário usa a moldura, paleta, texturas, botões e contraste do bioma atual.
+   - Foram adaptados cabeçalho, filtros, cartões, ícones, quantidades e rodapé.
+   - Incluídos ajustes específicos de legibilidade para a Geleira.
+4. Salvamento:
+   - Formato do save atualizado para versão 8.
+   - A migração cria o mapa de novidades vazio para saves anteriores, preservando todos os materiais já armazenados.
+   - O mapa de novidades faz parte do objeto de inventário sincronizado com a nuvem.
+
+PRESERVADO
+- UI principal dos biomas, acampamento, nuvens, pássaros, árvores, tendas, movimentação social, Skill Tree, heróis, passivas e combate.
+- Receitas, crafting, mercador, consumíveis e equipamentos não foram implementados nesta etapa.
+
+INSTALAÇÃO
+1. Faça backup da pasta atual do jogo.
+2. Extraia o ZIP e substitua os arquivos do projeto.
+3. Preserve firebase-config.js caso tenha configuração personalizada.
+4. Não apague o save local nem o progresso da nuvem.
+
+VALIDAÇÃO
+- JavaScript validado sintaticamente.
+- HTML/IDs e arquivos locais conferidos.
+- CSS analisado sintaticamente.
+- Fluxos de drop, contador novo, abertura/limpeza e normalização de saves testados.
+- ZIP validado.

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#14112a" />
+    <title>Click Seeker Heróis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="ui-biomas.css" />
+</head>
+<body>
+    <!-- Aviso de erro na tela: mostra arquivo faltando ou falha de script, para facilitar achar o problema -->
+    <div class="erro-global" id="erro-global" hidden role="alert"></div>
+    <script>
+        window.addEventListener("error", function (e) {
+            var t = e.target, msg = "";
+            if (t && t.tagName === "SCRIPT") {
+                msg = "Não consegui carregar o arquivo \"" + (t.getAttribute("src") || "") + "\". Confira se ele está na mesma pasta do index.html.";
+            } else if (t && t.tagName === "LINK") {
+                if ((t.getAttribute("href") || "").indexOf("style.css") === -1) return;
+                msg = "Não consegui carregar o arquivo \"style.css\". Confira se ele está na mesma pasta do index.html.";
+            } else if (e.message) {
+                msg = "Erro no jogo: " + e.message + (e.filename ? " (" + e.filename.split("/").pop() + ":" + e.lineno + ")" : "");
+            }
+            var caixa = document.getElementById("erro-global");
+            if (!msg || !caixa || !caixa.hidden) return;
+            caixa.textContent = msg + "  (clique para fechar)";
+            caixa.hidden = false;
+            caixa.onclick = function () { caixa.hidden = true; };
+        }, true);
+    </script>
+    <div class="app">
+        <header class="topo">
+            <h1 class="titulo">Click Seeker</h1>
+            <nav class="acoes" aria-label="Ações do jogo">
+                <div class="ouro-box" id="ouro-box" aria-label="Ouro">
+                    <span class="moeda-icone" aria-hidden="true"></span>
+                    <span id="ouro">0</span>
+                </div>
+                <button class="btn-mini btn-icone btn-inventario" id="btn-inventario" type="button" aria-label="Inventário de materiais" title="Inventário de materiais">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8.5 7 4h10l2 4.5v11H5Z"/><path d="M5 9h14M9 4l1 5m5-5-1 5M9 13h6m-6 3h6"/><path d="M10 9v2m4-2v2"/></svg>
+                    <span class="selo" id="selo-materiais" hidden>0</span>
+                </button>
+                <button class="btn-mini btn-icone btn-camp-toggle" id="btn-alternar-camp" type="button" hidden aria-label="Voltar ao acampamento" title="Voltar ao acampamento">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 19 12 4l9 15H3Z"/><path d="M9 19v-5h6v5M3 19h18"/></svg>
+                </button>
+                <button class="btn-mini btn-arvore btn-icone" id="btn-arvore" type="button" aria-label="Talentos" title="Talentos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22v-5M12 17l-3 3M12 17l3 3M12 2 4 10h4l-5 6h18l-5-6h4L12 2Z" /></svg>
+                    <span class="selo" id="selo-pontos" hidden>0</span>
+                </button>
+                <button class="btn-mini btn-icone" id="btn-ajuda" type="button" aria-label="Ajuda" title="Ajuda">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.15 1.88c-.95.82-1.75 1.2-1.75 2.62M12 17.2h.01"/></svg>
+                </button>
+
+                <div class="menu-dropdown" data-menu-dropdown>
+                    <button class="btn-mini btn-icone menu-trigger" id="btn-menu-configuracoes" type="button" data-menu-trigger aria-label="Configurações" title="Configurações" aria-haspopup="true" aria-expanded="false" aria-controls="menu-configuracoes">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r="7.5"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6m10.2 10.2 1.6 1.6m0-13.4-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>
+                    </button>
+                    <div class="menu-lista" id="menu-configuracoes" hidden>
+                        <button class="menu-item" id="btn-som" type="button" aria-pressed="true">Som: ligado</button>
+                        <button class="menu-item" id="btn-salvar" type="button">Salvar</button>
+                        <button class="menu-item" id="btn-zerar" type="button">Zerar</button>
+                    </div>
+                </div>
+
+                <div class="menu-dropdown" data-menu-dropdown>
+                    <button class="btn-mini btn-icone menu-trigger" id="btn-menu-conta" type="button" data-menu-trigger aria-label="Conta" title="Conta" aria-haspopup="true" aria-expanded="false" aria-controls="menu-conta">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+                    </button>
+                    <div class="menu-lista menu-lista-conta" id="menu-conta" hidden>
+                        <button class="menu-item menu-item-perfil" id="btn-conta" type="button">Entrar</button>
+                        <button class="menu-item" id="btn-dev" type="button" hidden>Dev</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="jogo">
+            <section class="palco-col" aria-label="Combate">
+                <div class="cena" id="cena">
+                    <canvas class="fundo" id="fundo" width="160" height="96"></canvas>
+
+                    <div class="cena-topo">
+                        <span class="chip" id="zona-nome">Zona 1 · Floresta</span>
+                        <span class="chip" id="pips"></span>
+                    </div>
+
+                    <button class="monstro" id="monstro" type="button" aria-label="Atacar o monstro">
+                        <span class="monstro-corpo"><canvas id="monstro-canvas" width="16" height="16"></canvas><span class="monstro-efeitos" id="monstro-efeitos" aria-hidden="true"></span></span>
+                    </button>
+                    <div class="zona-pausada" id="zona-pausada" hidden><span class="camp-tenda-icone" aria-hidden="true"></span><b>Acampamento na Zona 10</b><small>O grupo está descansando.</small></div>
+
+                    <div class="banner" id="banner" aria-hidden="true"></div>
+                </div>
+
+                <div class="alvo">
+                    <div class="alvo-linha">
+                        <span class="alvo-nome" id="monstro-nome">Gosma</span>
+                        <span class="alvo-recorde" id="recorde">Recorde: zona 1</span>
+                    </div>
+                    <div class="vida" role="progressbar" aria-label="Vida do monstro">
+                        <div class="vida-fill" id="vida-fill"></div>
+                        <span class="vida-texto" id="vida-texto">10 / 10</span>
+                    </div>
+                    <div class="tempo" id="tempo" hidden>
+                        <div class="tempo-fill" id="tempo-fill"></div>
+                        <span class="tempo-texto" id="tempo-texto">30,0 s</span>
+                    </div>
+                </div>
+
+                <p class="taxas">
+                    <span>Dano por clique: <b id="dano-clique">1</b></span>
+                    <span>Dano por segundo: <b id="dps">0</b></span>
+                </p>
+
+                <div class="habilidades" id="habilidades"></div>
+
+                <div class="modo-zona-area" id="modo-zona-origem">
+                    <button class="btn-modo-zona" id="btn-farm" type="button" aria-pressed="true">Modo: avançar de zona</button>
+                </div>
+
+                <section class="mapa-zonas" id="mapa-zonas" aria-label="Mapa da expedição">
+                    <div class="mapa-zonas-topo">
+                        <h2>Mapa da expedição</h2>
+                        <span id="mapa-titulo">Zonas 1–10</span>
+                    </div>
+                    <div class="mapa-quadro" id="mapa-quadro" data-bioma="floresta">
+                        <svg id="mapa-trilha" viewBox="0 0 320 320" role="img" aria-label="Trilha das zonas da expedição" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </div>
+                    <p class="mapa-legenda" id="mapa-legenda">Seu grupo está na Zona 1</p>
+                </section>
+            </section>
+
+            <section class="grupo" id="grupo" aria-label="Grupo de heróis">
+                <div class="grupo-topo">
+                    <h2>Grupo</h2>
+                    <span class="grupo-conta" id="grupo-conta">0 / 0</span>
+                </div>
+                <div class="grupo-grade" id="grupo-grade"></div>
+                <p class="grupo-total">Dano total por segundo: <b id="grupo-dps">0</b></p>
+            </section>
+
+            <section class="loja" aria-label="Heróis">
+                <div class="loja-topo">
+                    <h2>Heróis</h2>
+                    <div class="modos" role="group" aria-label="Quantidade por compra">
+                        <button class="btn-qtd" type="button" data-modo="1" aria-pressed="true">x1</button>
+                        <button class="btn-qtd" type="button" data-modo="10" aria-pressed="false">x10</button>
+                        <button class="btn-qtd" type="button" data-modo="25" aria-pressed="false">x25</button>
+                        <button class="btn-qtd" type="button" data-modo="max" aria-pressed="false">Máx</button>
+                    </div>
+                </div>
+                <div class="loja-contratar-topo" aria-hidden="true"><span class="loja-mao-pixel">✦</span><h3>Contratar</h3></div>
+                <ul class="lista-herois" id="lista-herois"></ul>
+            </section>
+
+            <section class="acampamento" id="acampamento" hidden aria-label="Acampamento da expedição">
+                <div class="acampamento-topo">
+                    <div>
+                        <span class="camp-etiqueta">REFÚGIO DA EXPEDIÇÃO</span>
+                        <h2>Acampamento</h2>
+                        <p id="camp-subtitulo">O grupo encontrou um lugar seguro para descansar.</p>
+                    </div>
+                    <div class="camp-periodo-box">
+                        <span class="camp-sol-icone" aria-hidden="true"></span>
+                        <b id="camp-periodo">Dia</b>
+                    </div>
+                </div>
+                    <div class="camp-cenario" id="camp-cenario" data-periodo="dia">
+                    <div class="camp-lua-sol" aria-hidden="true"></div>
+                    <div class="camp-estrelas" aria-hidden="true"></div>
+                    <div class="camp-nuvens" aria-hidden="true">
+                        <span class="camp-nuvem nuvem-a"></span>
+                        <span class="camp-nuvem nuvem-b"></span>
+                        <span class="camp-nuvem nuvem-c"></span>
+                    </div>
+                    <div class="camp-morros" aria-hidden="true"></div>
+                    <div class="camp-chao" aria-hidden="true"></div>
+                    <div class="camp-clareira-fogueira" aria-hidden="true"></div>
+                    <div class="camp-arvores-fundo" aria-hidden="true">
+                        <img class="camp-arvore-sprite arvore-a" src="assets/arvore1.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-b" src="assets/arvore2.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-c" src="assets/arvore3.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-d" src="assets/arvore1.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-e" src="assets/arvore2.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-f" src="assets/arvore3.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-g" src="assets/arvore1.png" alt="" />
+                        <img class="camp-arvore-sprite arvore-h" src="assets/arvore2.png" alt="" />
+                    </div>
+                    <svg class="camp-trilha-terreno" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+                        <path class="camp-trilha-lama" d="M500 520 C475 450 570 412 520 350 S420 255 485 185" />
+                        <path class="camp-trilha-terra" d="M500 520 C475 450 570 412 520 350 S420 255 485 185" />
+                        <path class="camp-trilha-borda" d="M500 520 C475 450 570 412 520 350 S420 255 485 185" />
+                        <path class="camp-trilha-atalho" d="M130 500 C180 430 250 420 330 390 S420 350 470 305" />
+                        <g class="camp-pedras-caminho">
+                            <path d="m472 435 8-5 8 4-3 7-10 1Z"/><path d="m510 405 7-4 8 5-5 6-9-2Z"/>
+                            <path d="m535 370 8-5 9 5-4 7-10-1Z"/><path d="m496 330 7-5 8 4-2 7-10 1Z"/>
+                            <path d="m455 288 8-4 8 5-3 7-9-2Z"/><path d="m472 244 8-5 8 4-3 7-10 1Z"/>
+                            <path d="m260 430 7-4 8 4-3 6-9 1Z"/><path d="m310 411 8-5 8 4-2 7-10 1Z"/>
+                        </g>
+                    </svg>
+                    <div class="camp-lama camp-lama-a" aria-hidden="true"></div>
+                    <div class="camp-lama camp-lama-b" aria-hidden="true"></div>
+                    <div class="camp-pedra camp-pedra-a" aria-hidden="true"></div>
+                    <div class="camp-pedra camp-pedra-b" aria-hidden="true"></div>
+                    <div class="camp-pedra camp-pedra-c" aria-hidden="true"></div>
+                    <div class="camp-pedra camp-pedra-d" aria-hidden="true"></div>
+                    <div class="camp-pedra camp-pedra-e" aria-hidden="true"></div>
+                    <div class="camp-detalhes-terreno" aria-hidden="true">
+                        <span class="camp-arbusto arbusto-a"><i></i><b></b><em></em></span>
+                        <span class="camp-arbusto arbusto-b"><i></i><b></b><em></em></span>
+                        <span class="camp-arbusto arbusto-c"><i></i><b></b><em></em></span>
+                        <span class="camp-arbusto arbusto-d"><i></i><b></b><em></em></span>
+                        <span class="camp-arbusto arbusto-e"><i></i><b></b><em></em></span>
+                        <span class="camp-arbusto arbusto-f"><i></i><b></b><em></em></span>
+                        <span class="camp-tronco tronco-a"><i></i><b></b></span>
+                        <span class="camp-tronco tronco-b"><i></i><b></b></span>
+                        <span class="camp-tronco tronco-c"><i></i><b></b></span>
+                    </div>
+                    <div class="camp-banco" aria-hidden="true"><i></i><b></b></div>
+                    <div class="camp-fogueira" aria-hidden="true">
+                        <span class="camp-pedras-fogueira"><i></i><b></b><em></em></span>
+                        <span class="camp-lenha-pixel"></span>
+                        <span class="camp-fogo-pixel"><i></i><b></b></span>
+                    </div>
+                    <div class="camp-passaros" id="camp-passaros" aria-hidden="true">
+                        <span class="camp-passaro" data-ave="a"><svg viewBox="0 0 16 12" shape-rendering="crispEdges"><path d="M1 6h3V4h3V2h3v2h3v2h2v2h-4v2H7V9H4V8H1Z"/><path class="camp-asa" d="M5 4h4V1H7Z"/></svg></span>
+                        <span class="camp-passaro" data-ave="b"><svg viewBox="0 0 16 12" shape-rendering="crispEdges"><path d="M1 6h3V4h3V2h3v2h3v2h2v2h-4v2H7V9H4V8H1Z"/><path class="camp-asa" d="M5 4h4V1H7Z"/></svg></span>
+                        <span class="camp-passaro" data-ave="c"><svg viewBox="0 0 16 12" shape-rendering="crispEdges"><path d="M1 6h3V4h3V2h3v2h3v2h2v2h-4v2H7V9H4V8H1Z"/><path class="camp-asa" d="M5 4h4V1H7Z"/></svg></span>
+                    </div>
+                    <div class="camp-roster" id="camp-roster"></div>
+                    <div class="camp-estacoes-mundo" id="camp-estacoes-mundo" aria-label="Estações de trabalho do acampamento"></div>
+                    <div class="camp-cenario-placa" aria-hidden="true">ZONA SEGURA</div>
+                </div>
+                <section class="camp-oficinas" id="camp-oficinas" aria-labelledby="camp-oficinas-titulo">
+                    <header class="camp-oficinas-topo">
+                        <div><span class="camp-oficina-etiqueta-geral">OFICINAS DO ACAMPAMENTO</span><h3 id="camp-oficinas-titulo">Construções e estações de trabalho</h3><p>Invista os materiais coletados para preparar o equipamento da equipe.</p></div>
+                        <span class="camp-oficinas-progresso" id="camp-oficinas-progresso">0 de 2 estruturas construídas</span>
+                    </header>
+                    <div class="camp-oficinas-grade" id="camp-oficinas-grade" aria-live="polite"></div>
+                </section>
+                <div class="acampamento-rodape" id="acampamento-rodape">
+                    <span>Descanse, organize seus materiais e prepare as oficinas antes de seguir viagem.</span>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-fundo inventario-fundo" id="inventario-materiais" hidden>
+        <section class="modal-caixa inventario-caixa" role="dialog" aria-modal="true" aria-labelledby="inventario-titulo">
+            <header class="modal-topo inventario-topo">
+                <div>
+                    <span class="inventario-etiqueta">BOLSA DA EXPEDIÇÃO</span>
+                    <h2 id="inventario-titulo">Inventário da expedição</h2>
+                    <p id="inventario-resumo">Nenhum material coletado ainda.</p>
+                </div>
+                <button class="btn-mini" id="inventario-fechar" type="button">Fechar</button>
+            </header>
+            <nav class="inventario-filtros" id="inventario-filtros" aria-label="Filtrar materiais">
+                <button class="inventario-filtro ativo" type="button" data-filtro-material="todos" aria-pressed="true">Todos</button>
+                <button class="inventario-filtro" type="button" data-filtro-material="basico" aria-pressed="false">Básicos</button>
+                <button class="inventario-filtro" type="button" data-filtro-material="bioma" aria-pressed="false">Biomas</button>
+                <button class="inventario-filtro" type="button" data-filtro-material="especial" aria-pressed="false">Especiais</button>
+                <button class="inventario-filtro inventario-filtro-equipamentos" type="button" data-filtro-material="equipamentos" aria-pressed="false">Equipamentos</button>
+            </nav>
+            <div class="inventario-grade" id="inventario-grade" aria-live="polite"></div>
+            <footer class="inventario-rodape">Materiais são usados nas construções e receitas. Equipamentos fabricados ficam disponíveis para serem atribuídos individualmente aos heróis.</footer>
+        </section>
+    </div>
+
+    <div class="modal-fundo heroi-card-fundo" id="heroi-card" hidden>
+        <section class="modal-caixa heroi-card-caixa" role="dialog" aria-modal="true" aria-labelledby="heroi-card-titulo">
+            <header class="modal-topo"><div><span class="inventario-etiqueta">COMPANHEIRO DA EXPEDIÇÃO</span><h2 id="heroi-card-titulo">Personagem</h2></div><div class="heroi-card-acoes"><button class="btn-mini" id="heroi-tutorial-abrir" type="button" title="Como funcionam os equipamentos" aria-label="Ajuda sobre equipamentos">?</button><button class="btn-mini" id="heroi-card-fechar" type="button">Fechar</button></div></header>
+            <div id="heroi-card-conteudo"></div>
+        </section>
+    </div>
+    <div class="modal-fundo heroi-tutorial-fundo" id="heroi-tutorial" hidden>
+        <section class="modal-caixa heroi-tutorial-caixa" role="dialog" aria-modal="true" aria-labelledby="heroi-tutorial-titulo">
+            <header class="modal-topo"><div><span class="inventario-etiqueta">GUIA RÁPIDO</span><h2 id="heroi-tutorial-titulo">Equipando seus heróis</h2></div><button class="btn-mini" id="heroi-tutorial-fechar" type="button">Fechar</button></header>
+            <p>Cada herói possui três espaços próprios. Os equipamentos não são compartilhados: o item equipado em um personagem pertence àquele personagem.</p>
+            <ul class="heroi-tutorial-lista"><li><b>Arma:</b> melhora o dano causado.</li><li><b>Armadura:</b> fortalece o herói equipado com um bônus de dano.</li><li><b>Acessório:</b> concede efeitos especiais e atributos variados.</li></ul>
+            <p>Fabrique armas na <b>forja</b> e armaduras ou acessórios na <b>bancada de ofício</b>, usando os materiais coletados. Depois, clique no espaço correspondente para equipar, trocar ou retirar um item.</p>
+            <p class="heroi-tutorial-nota">Você pode abrir este guia novamente pelo botão <b>?</b> no card de qualquer herói.</p>
+        </section>
+    </div>
+
+    <div class="modal-fundo oficina-modal-fundo" id="oficina-modal" hidden>
+        <section class="modal-caixa oficina-modal-caixa" role="dialog" aria-modal="true" aria-labelledby="oficina-modal-titulo">
+            <header class="modal-topo"><div><span class="inventario-etiqueta">OFICINA DO ACAMPAMENTO</span><h2 id="oficina-modal-titulo">Estação de trabalho</h2></div><button class="btn-mini" id="oficina-modal-fechar" type="button">Fechar</button></header>
+            <div id="oficina-modal-conteudo"></div>
+        </section>
+    </div>
+
+    <div class="camp-pergunta" id="camp-pergunta" hidden>
+        <section class="camp-pergunta-caixa" role="dialog" aria-modal="true" aria-labelledby="camp-pergunta-titulo">
+            <div class="camp-pergunta-icone" aria-hidden="true"><span class="camp-tenda-icone"></span></div>
+            <span class="camp-etiqueta">FIM DA ETAPA</span>
+            <h2 id="camp-pergunta-titulo">Um lugar para descansar?</h2>
+            <p>Você e seu grupo chegaram a um acampamento. Quer parar um pouco para descansar ou continuar a expedição?</p>
+            <div class="camp-pergunta-acoes">
+                <button class="btn-grande" id="btn-camp-descansar" type="button">Descansar no acampamento</button>
+                <button class="btn-mini" id="btn-camp-continuar" type="button">Continuar jornada</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="arvore-fundo" id="arvore" hidden>
+        <section class="arvore-painel" role="dialog" aria-modal="true" aria-labelledby="arvore-titulo">
+            <header class="arvore-topo">
+                <div class="arvore-titulo-grupo">
+                    <h2 id="arvore-titulo">Árvore de Talentos</h2>
+                    <span class="arvore-dica" id="arvore-dica">Do núcleo da expedição partem quatro caminhos de evolução.</span>
+                    <div class="arvore-modos" role="tablist" aria-label="Categorias de talentos">
+                        <button class="arvore-modo ativo" id="arvore-modo-principal" type="button" role="tab" aria-selected="true">Expedição</button>
+                        <button class="arvore-modo" id="arvore-modo-passivas" type="button" role="tab" aria-selected="false" hidden>Passivas especiais</button>
+                    </div>
+                </div>
+                <span class="arvore-pontos">Pontos disponíveis: <b id="arvore-pontos">0</b></span>
+                <div class="arvore-acoes">
+                    <button class="btn-mini" id="arvore-consultar-passivas" type="button" hidden>Consultar passivas</button>
+                    <button class="btn-mini" id="arvore-centralizar" type="button" title="Centralizar a árvore">Centralizar</button>
+                    <button class="btn-mini" id="arvore-redefinir" type="button">Redefinir</button>
+                    <button class="btn-mini" id="arvore-fechar" type="button">Fechar</button>
+                </div>
+            </header>
+            <div class="arvore-viewport" id="arvore-viewport" aria-label="Área arrastável da árvore de talentos">
+                <div class="arvore-ramos" id="arvore-ramos"></div>
+            </div>
+            <footer class="arvore-rodape">
+                <div class="arvore-info" id="arvore-info" aria-live="polite">Selecione uma habilidade para ver seus detalhes.</div>
+            </footer>
+        </section>
+        <div class="passivas-aviso-fundo" id="passivas-aviso" hidden>
+            <section class="passivas-aviso-caixa" role="dialog" aria-modal="true" aria-labelledby="passivas-aviso-titulo">
+                <span class="passivas-aviso-etiqueta" id="passivas-aviso-etiqueta">NOVA DESCOBERTA</span>
+                <h2 id="passivas-aviso-titulo">Uma nova chama despertou</h2>
+                <div class="passivas-aviso-conteudo" id="passivas-aviso-conteudo"></div>
+                <div class="passivas-aviso-acoes">
+                    <button class="btn-mini" id="passivas-aviso-ver-arvore" type="button">Ver árvore de passivas</button>
+                    <button class="btn-grande" id="passivas-aviso-fechar" type="button">Entendi</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Tela inicial -->
+    <div class="inicio" id="inicio">
+        <div class="inicio-caixa">
+            <div class="inicio-sprites" aria-hidden="true">
+                <canvas data-sprite="slime"></canvas>
+                <canvas data-sprite="pip"></canvas>
+                <canvas data-sprite="padre"></canvas>
+                <canvas data-sprite="dragao"></canvas>
+            </div>
+            <h1 class="inicio-titulo">Click Seeker</h1>
+            <p class="inicio-sub">Clique, contrate heróis e derrote chefes.</p>
+            <button class="btn-grande" id="inicio-jogar" type="button">Jogar</button>
+            <p class="inicio-info" id="inicio-info"></p>
+            <div class="inicio-links">
+                <button class="btn-mini" id="inicio-tutorial" type="button">Como jogar</button>
+                <button class="btn-mini" id="inicio-conta" type="button">Conta</button>
+            </div>
+            <p class="inicio-status" id="inicio-status"></p>
+        </div>
+    </div>
+
+    <!-- Tutorial completo (pulável, reabre pelo botão Ajuda ou tecla H) -->
+    <div class="tut-fundo" id="tutorial" hidden>
+        <section class="tut-caixa" role="dialog" aria-modal="true" aria-labelledby="tut-titulo">
+            <header class="tut-topo">
+                <span class="tut-etapa" id="tut-etapa"></span>
+                <div class="tut-topo-acoes">
+                    <button class="btn-mini" id="tut-indice-btn" type="button" aria-expanded="false">Índice</button>
+                    <button class="btn-mini tut-pular" id="tut-pular" type="button">Pular tutorial</button>
+                </div>
+            </header>
+            <div class="tut-barra" aria-hidden="true"><span id="tut-barra-fill"></span></div>
+            <nav class="tut-indice" id="tut-indice" hidden aria-label="Capítulos do tutorial"></nav>
+            <div class="tut-corpo" id="tut-corpo">
+                <div class="tut-arte" id="tut-arte" aria-hidden="true"></div>
+                <h2 id="tut-titulo"></h2>
+                <div class="tut-texto" id="tut-texto"></div>
+            </div>
+            <div class="tut-pontos" id="tut-pontos" aria-hidden="true"></div>
+            <div class="tut-nav">
+                <button class="btn-mini" id="tut-voltar" type="button">Voltar</button>
+                <button class="btn-grande" id="tut-proximo" type="button">Próximo</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Conta -->
+    <div class="modal-fundo" id="conta" hidden>
+        <section class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="conta-titulo">
+            <header class="modal-topo">
+                <h2 id="conta-titulo">Conta</h2>
+                <button class="btn-mini" id="conta-fechar" type="button">Fechar</button>
+            </header>
+
+            <div id="conta-deslogado">
+                <p class="conta-aviso" id="conta-aviso"></p>
+                <div class="abas" role="group" aria-label="Entrar ou criar conta">
+                    <button class="aba" type="button" data-aba="entrar" aria-pressed="true">Entrar</button>
+                    <button class="aba" type="button" data-aba="criar" aria-pressed="false">Criar conta</button>
+                </div>
+                <form class="conta-form" id="conta-form" novalidate>
+                    <label data-so="criar">Nome de jogador
+                        <input id="conta-nome" type="text" maxlength="24" autocomplete="nickname" />
+                    </label>
+                    <label>E-mail
+                        <input id="conta-email" type="email" autocomplete="email" />
+                    </label>
+                    <label>Senha
+                        <input id="conta-senha" type="password" minlength="6" autocomplete="current-password" />
+                    </label>
+                    <details class="conta-dev" data-so="criar">
+                        <summary>Sou desenvolvedor</summary>
+                        <label>Código de dev
+                            <input id="conta-codigo" type="password" autocomplete="off" />
+                        </label>
+                    </details>
+                    <p class="conta-erro" id="conta-erro" role="alert"></p>
+                    <button class="btn-grande" id="conta-enviar" type="submit">Entrar</button>
+                </form>
+                <div class="conta-ou">ou</div>
+                <div class="conta-extra">
+                    <button class="btn-mini" id="conta-google" type="button">Entrar com Google</button>
+                    <button class="btn-link" id="conta-esqueci" type="button" data-so="entrar">Esqueci a senha</button>
+                </div>
+            </div>
+
+            <div id="conta-logado" hidden>
+                <p class="conta-perfil">
+                    <b id="conta-nome-ver"></b>
+                    <span class="papel" id="conta-papel"></span><br />
+                    <small id="conta-email-ver"></small>
+                </p>
+                <p class="conta-sync" id="conta-sync"></p>
+                <div class="conta-acoes">
+                    <button class="btn-mini" id="conta-enviar-nuvem" type="button">Salvar na nuvem agora</button>
+                    <button class="btn-mini" id="conta-baixar" type="button">Baixar da nuvem</button>
+                    <button class="btn-mini" id="conta-sair" type="button">Sair</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pergunta genérica (conflito entre nuvem e aparelho etc.) -->
+    <div class="modal-fundo" id="dialogo" hidden>
+        <section class="modal-caixa" role="alertdialog" aria-modal="true" aria-labelledby="dialogo-titulo">
+            <h2 id="dialogo-titulo"></h2>
+            <div class="dialogo-corpo" id="dialogo-corpo"></div>
+            <div class="dialogo-botoes" id="dialogo-botoes"></div>
+        </section>
+    </div>
+
+    <!-- Painel de desenvolvedor (só aparece para contas dev) -->
+    <aside class="dev" id="dev" hidden aria-label="Painel de desenvolvedor">
+        <header class="dev-topo">
+            <b>Painel Dev</b>
+            <button class="btn-mini" id="dev-fechar" type="button">Esconder</button>
+        </header>
+        <div class="dev-corpo" id="dev-corpo"></div>
+    </aside>
+
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+    <script src="firebase-config.js"></script>
+    <script src="sprites.js"></script>
+    <script src="script.js"></script>
+    <script src="nuvem.js"></script>
+    <script src="meta.js"></script>
+</body>
+</html>

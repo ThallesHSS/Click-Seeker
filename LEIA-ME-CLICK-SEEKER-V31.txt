@@ -1,0 +1,53 @@
+CLICK SEEKER — ATUALIZAÇÃO V31
+Compatibilidade de armas e substituição visual da arma padrão
+
+O QUE MUDOU
+
+1. CATEGORIAS DE ARMAS POR PERSONAGEM
+- Cada herói possui uma categoria própria de arma.
+- Espadas: Tora, Draco, Kuro e Aurélio.
+- Arcos: Mira, Bento e Cefas.
+- Cajados: aprendizes, magos, clérigos, druidas, alquimistas e personagens de perfil mágico/espiritual.
+- Machado: Barba-Ruiva e Ossinho.
+- Adagas: Sombra e Kobi.
+- As categorias Punhos e Grimório já estão identificadas para heróis correspondentes, prontas para receber receitas futuras.
+- O seletor de equipamento exibe apenas armas compatíveis com o herói.
+- A validação também ocorre ao equipar e ao carregar saves antigos.
+- Armas anteriormente equipadas em personagens incompatíveis voltam a ficar disponíveis no inventário; nenhum item é destruído.
+
+2. SUBSTITUIÇÃO VISUAL DA ARMA PADRÃO
+- Ao equipar uma arma, os pixels extras que formam a arma original do sprite são removidos.
+- A arma fabricada é desenhada na mão/posição da arma original do personagem.
+- A máscara remove somente os pixels extras da arma, preservando o desenho-base do corpo, roupas e rosto.
+- A atualização aparece no acampamento, na tela principal do grupo, no card do personagem e após a animação de caminhada.
+- Arco, cajado, espada, machado e adagas possuem desenhos pixel art próprios.
+
+3. NOVAS RECEITAS NA FORJA
+- Arco de Caçador: +18% de dano; 5 madeiras, 2 couros e 2 tecidos.
+- Cajado de Carvalho: +17% de dano; 5 madeiras, 2 ferros brutos e 3 ervas.
+- Adagas da Sombra: +19% de dano; 5 ferros brutos e 3 couros.
+- As receitas antigas de Espada de Ferro e Machado de Batalha agora têm a categoria de arma registrada.
+
+4. NOVOS ÍCONES
+- Arco de Caçador, Cajado de Carvalho e Adagas da Sombra receberam PNGs pixel art transparentes em 128x128.
+- Os ícones aparecem nas receitas, no inventário, no seletor e nos espaços de equipamento.
+
+COMPATIBILIDADE E SAVE
+- A versão do save permanece V11: a estrutura do estado não foi quebrada.
+- Saves anteriores são normalizados a partir do catálogo de receitas.
+- Itens antigos recebem a categoria correta pela receita original.
+- Itens continuam individuais e não podem ser usados simultaneamente por dois heróis.
+
+ARQUIVOS ALTERADOS
+- script.js
+- sprites.js
+- assets/arco-cacador.png
+- assets/cajado-carvalho.png
+- assets/adagas-sombra.png
+
+VALIDAÇÃO
+- node --check executado em script.js, sprites.js, meta.js e nuvem.js.
+- IDs HTML, CSS e referências locais conferidos.
+- Categorias e receitas cruzadas com o elenco atual.
+- Pixels de arma padrão mascarados apenas na camada de extras dos sprites.
+- Integridade do ZIP conferida.

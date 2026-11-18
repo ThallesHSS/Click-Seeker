@@ -1,0 +1,38 @@
+CLICK SEEKER — ATUALIZAÇÃO V30
+Centralização dos ícones e ferramentas de materiais no menu Dev
+
+O QUE MUDOU
+
+1. ÍCONES DOS EQUIPAMENTOS CENTRALIZADOS
+- Os quatro PNGs de equipamento foram normalizados em telas quadradas transparentes de 128x128.
+- A área visível de cada desenho foi centralizada sem alterar sua aparência pixel art.
+- Isso corrige os deslocamentos dentro dos quadrinhos das receitas, inventário, seletor e espaços de equipamento.
+
+2. FERRAMENTAS DE MATERIAIS NO MENU DEV
+- Novo seletor para escolher qualquer material do catálogo e adicionar a quantidade desejada.
+- Atalho para adicionar 10 unidades de cada material básico.
+- Atalho para adicionar 10 unidades de cada material de bioma.
+- Atalho para adicionar 10 unidades de cada material especial.
+- Atalho para adicionar 10 unidades de todos os materiais.
+- A quantidade individual pode variar de 1 a 1.000.000.
+- As funções chamam o mesmo sistema de inventário usado pelo jogo, atualizam o indicador de novidades e salvam o progresso.
+- O painel continua protegido pelas mesmas permissões de desenvolvedor já existentes.
+
+COMPATIBILIDADE
+- Nenhum dado novo foi adicionado ao save; a versão do save permanece 11.
+- Os saves da V29 continuam compatíveis.
+- Receitas, custos, atributos, equipamentos e progressão não foram alterados.
+
+ARQUIVOS ALTERADOS
+- meta.js: controles de adição de materiais no painel Dev.
+- assets/espada-ferro.png
+- assets/machado-batalha.png
+- assets/gibao-couro.png
+- assets/amuleto-viajante.png
+
+VALIDAÇÃO
+- JavaScript verificado com node --check.
+- CSS validado sem erros de parsing.
+- IDs HTML verificados sem duplicatas.
+- Os quatro ícones foram verificados em canvas quadrado com centro da área visível alinhado ao centro.
+- Integridade do ZIP conferida.

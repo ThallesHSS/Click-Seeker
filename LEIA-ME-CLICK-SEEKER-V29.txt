@@ -1,0 +1,36 @@
+CLICK SEEKER — ATUALIZAÇÃO V29
+Equipamentos visuais, estações reposicionadas e ícones pixel art
+
+O QUE MUDOU
+
+1. EQUIPAMENTOS VISÍVEIS NOS PERSONAGENS
+- Armas, armaduras e acessórios equipados agora são desenhados como camadas de pixel art sobre os sprites originais.
+- A aparência é atualizada no painel do grupo da tela principal e nos personagens do acampamento.
+- O card individual do herói também mostra o sprite com os itens que ele está usando.
+- A composição é preservada durante as animações de caminhada no acampamento.
+- Ao equipar ou retirar uma peça, os sprites são atualizados imediatamente.
+
+2. OFICINAS NO ACAMPAMENTO
+- Bancada de Ofício e Forja foram movidas para a clareira central superior, entre as fileiras laterais de tendas.
+- Permanecem clicáveis para abrir suas respectivas receitas.
+- A bancada continua aparecendo antes da Forja, conforme a progressão de construção.
+
+3. ÍCONES DOS EQUIPAMENTOS
+- Foram adicionados quatro ícones próprios em pixel art: Espada de Ferro, Machado de Batalha, Gibão de Couro e Amuleto do Viajante.
+- Os ícones aparecem nas receitas, no inventário de equipamentos, no seletor de itens e nos espaços do card do herói.
+- Os arquivos PNG ficam em assets/ e usam transparência real, sem fundo de tabuleiro.
+
+COMPATIBILIDADE
+- Não foi adicionada uma nova estrutura de dados ao save. A versão interna do save permanece compatível com a V28.
+- Saves anteriores continuam válidos; os ícones são resolvidos pelo ID da receita do equipamento.
+- Os valores de atributos, custos, receitas, estruturas e progressão não foram alterados.
+
+ARQUIVOS PRINCIPAIS
+- script.js: composição visual dos equipamentos, redesenho dos sprites, posições das oficinas e renderização de ícones.
+- style.css: estilos para os ícones e posicionamento das estações.
+- assets/espada-ferro.png
+- assets/machado-batalha.png
+- assets/gibao-couro.png
+- assets/amuleto-viajante.png
+
+A V29 foi validada por sintaxe JavaScript, referências de assets, parsing de CSS/HTML e integridade do arquivo ZIP.

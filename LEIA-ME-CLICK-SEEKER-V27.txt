@@ -1,0 +1,48 @@
+CLICK SEEKER — V27: OFICINAS DO ACAMPAMENTO
+
+BASE
+- Continuação direta da V26, preservando o clique nos personagens, fichas individuais e tutorial de equipamentos.
+
+ESTRUTURAS CRAFTÁVEIS
+1. Bancada de Ofício
+   - Custo: 5 Madeira, 3 Pedra e 2 Tecido.
+   - Primeira estrutura da progressão.
+   - Preparada para fabricar armaduras e acessórios na próxima etapa.
+2. Forja
+   - Requer a Bancada de Ofício construída.
+   - Custo: 6 Pedra, 4 Ferro bruto e 3 Madeira.
+   - Preparada para fabricar armas e equipamentos metálicos na próxima etapa.
+
+FUNCIONAMENTO
+- As estruturas são construídas pela seção “Construções e estações de trabalho” no acampamento.
+- O jogador só pode construir se possuir todos os materiais exigidos.
+- Os custos são descontados do inventário atomicamente; não há consumo parcial.
+- Ao consumir unidades recém-coletadas, o selo de novidades também é ajustado.
+- Estruturas construídas são permanentes e não podem ser construídas novamente.
+- Cada estação possui uma janela de acesso com sua especialidade. As receitas de itens/equipamentos serão adicionadas na etapa seguinte.
+- A forja fica bloqueada até a construção da bancada, orientando a ordem de progressão.
+
+SAVE / NUVEM
+- Save atualizado para versão 10.
+- O campo inventario.estruturas já faz parte do inventário persistente e é incluído na assinatura de sincronização da nuvem.
+- Saves antigos migram sem perder materiais, heróis, talentos, equipamentos ou progresso.
+
+PRESERVADO
+- Correção de clique nos personagens (V26).
+- Fichas dos heróis, slots individuais de arma/armadura/acessório e tutorial acessível.
+- Materiais, probabilidades de drop, contador de novidades e interface adaptativa por bioma.
+- Acampamento, ciclo dia/noite, tendas, interações sociais, árvores, nuvens e demais sistemas existentes.
+- firebase-config.js do projeto original.
+
+INSTALAÇÃO
+1. Faça backup da pasta atual.
+2. Extraia o ZIP e substitua os arquivos do projeto.
+3. Preserve seu firebase-config.js caso possua configuração personalizada.
+4. Não apague o save: a migração é automática.
+
+VALIDAÇÃO
+- JavaScript validado sintaticamente.
+- HTML verificado quanto a IDs duplicados e referências locais.
+- CSS analisado sintaticamente.
+- ZIP conferido quanto à integridade.
+- A validação visual completa no navegador não foi possível neste ambiente.
